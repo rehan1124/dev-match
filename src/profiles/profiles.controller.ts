@@ -1,0 +1,71 @@
+import { Controller, Get, Query, Param, Post, Body, Put, Delete, HttpCode, HttpStatus } from '@nestjs/common';
+import { CreateProfileDto } from './dto/create-profile.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
+
+@Controller('profiles')
+export class ProfilesController {
+
+    /**
+     * GET request for all profiles. Ex: /profiles?age=25&location=UK
+     * @param age Age
+     * @param location Location
+     * @returns Response with age and location
+     * [{}] if no query param OR [{"age":"25","location":"UK"}]
+     */
+    @Get()
+    findAll(
+        @Query('age') age: number,
+        @Query('location') location: string
+    ) {
+        return [{ age, location }];
+    }
+
+    /**
+     * GET request for profile ID. Ex: /profiles/1234.
+     * @param id Profile ID
+     * @returns Response with Profile ID
+     * {"id":"1234"}
+     */
+    @Get(':id')
+    findOne(
+        @Param('id') id: string
+    ) {
+        return { id };
+    }
+
+    /**
+     * Create new profile
+     * @param createProfileDto Payload to pass. Should follow CreateProfileDto class.
+     * @returns Response in the form of object, containing details of new profile created.
+     * {"name":"John","description":"John Wick's car"}
+     */
+    @Post()
+    create(@Body() createProfileDto: CreateProfileDto) {
+        return {
+            ...createProfileDto
+        }
+    }
+
+    /**
+     * Update profile for given ID with payload passed
+     * @param id 
+     * @param updateProfileDto 
+     * @returns Response with id, name and description
+     * {"id":"007","name":"Gunslinger","description":"The Demon Hunter"}
+     */
+    @Put(':id')
+    update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto) {
+        return {
+            id, ...updateProfileDto
+        }
+    }
+
+    /**
+     * Delete profile
+     * @param id Profile ID. Example: DELETE /profiles/007
+     */
+    @Delete(':id')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    delete(@Param('id') id: string) {
+    }
+}
