@@ -1,9 +1,12 @@
 import { Controller, Get, Query, Param, Post, Body, Put, Delete, HttpCode, HttpStatus } from '@nestjs/common';
 import { CreateProfileDto } from './dto/create-profile.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
+import { ProfilesService } from './profiles.service';
 
 @Controller('profiles')
 export class ProfilesController {
+
+    constructor(private profilesService: ProfilesService) { }
 
     /**
      * GET request for all profiles. Ex: /profiles?age=25&location=UK
@@ -17,7 +20,8 @@ export class ProfilesController {
         @Query('age') age: number,
         @Query('location') location: string
     ) {
-        return [{ age, location }];
+        // return [{ age, location }];
+        return this.profilesService.findAll();
     }
 
     /**
@@ -30,7 +34,7 @@ export class ProfilesController {
     findOne(
         @Param('id') id: string
     ) {
-        return { id };
+        return this.profilesService.findOne(id);
     }
 
     /**
