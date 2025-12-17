@@ -45,9 +45,7 @@ export class ProfilesController {
      */
     @Post()
     create(@Body() createProfileDto: CreateProfileDto) {
-        return {
-            ...createProfileDto
-        }
+        return this.profilesService.create(createProfileDto);
     }
 
     /**
@@ -59,9 +57,7 @@ export class ProfilesController {
      */
     @Put(':id')
     update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto) {
-        return {
-            id, ...updateProfileDto
-        }
+        return this.profilesService.update(id, updateProfileDto);
     }
 
     /**
@@ -71,5 +67,6 @@ export class ProfilesController {
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     delete(@Param('id') id: string) {
+        this.profilesService.remove(id);
     }
 }
